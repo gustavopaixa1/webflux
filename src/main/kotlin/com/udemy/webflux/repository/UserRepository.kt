@@ -3,6 +3,7 @@ package com.udemy.webflux.repository
 import com.udemy.webflux.entity.User
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Repository
@@ -17,4 +18,9 @@ class UserRepository(
     public fun findById(id: String): Mono<User>{
         return mongoTemplate.findById(id, User::class.java)
     }
+
+    public fun findAll(): Flux<User> {
+        return mongoTemplate.findAll(User::class.java)
+    }
+
 }

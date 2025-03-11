@@ -31,15 +31,17 @@ class UserControllerImpl(
         return ResponseEntity.ok(userService.findById(id).map { userMapper.toResponse(it) })
     }
 
+    @GetMapping
     override fun findAll(): ResponseEntity<Flux<UserResponse>> {
-        TODO(TODO)
+        return ResponseEntity.ok(userService.findAll().map { userMapper.toResponse(it) })
     }
 
+    @PatchMapping("/{id}")
     override fun update(
-        id: String,
-        request: UserRequest
-    ): ResponseEntity<Mono<Unit>> {
-        TODO(TODO)
+        @PathVariable id: String,
+        @RequestBody request: UserRequest
+    ): ResponseEntity<Mono<UserResponse>> {
+        return ResponseEntity.ok(userService.update(id, request).map { userMapper.toResponse(it) })
     }
 
     override fun delete(id: String): ResponseEntity<Mono<Void>> {

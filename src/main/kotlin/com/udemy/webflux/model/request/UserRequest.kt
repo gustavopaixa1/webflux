@@ -8,20 +8,20 @@ class UserRequest(
 
     @field:Size(min = 3, max = 50)
     @field:NotBlank()
-    var name: String,
+    var name: String?,
 
     @field:Size(min = 3, max = 50)
     @field:NotBlank()
     @field:Email()
-    var email: String,
+    var email: String?,
 
     @field:Size(min = 3, max = 50)
     @field:NotBlank()
-    var password: String
+    var password: String?
 ) {
     init {
-        name = name.trim()
-        email = email.trim()
+        name = name?.trim()
+        email = email?.trim()
     }
 }
 

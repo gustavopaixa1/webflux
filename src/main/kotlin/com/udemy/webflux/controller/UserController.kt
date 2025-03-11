@@ -19,7 +19,7 @@ interface UserController {
     fun findAll(): ResponseEntity<Flux<UserResponse>>
 
     @PatchMapping("/id")
-    fun update(@PathVariable id: String, @RequestBody request: UserRequest): ResponseEntity<Mono<Unit>>
+    fun update(@PathVariable id: String, @RequestBody request: UserRequest): ResponseEntity<Mono<UserResponse>>
 
     @DeleteMapping("/id")
     fun delete(@PathVariable id: String): ResponseEntity<Mono<Void>>
