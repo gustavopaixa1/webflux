@@ -8,15 +8,20 @@ class UserRequest(
 
     @field:Size(min = 3, max = 50)
     @field:NotBlank()
-    val name: String,
+    var name: String,
 
     @field:Size(min = 3, max = 50)
     @field:NotBlank()
     @field:Email()
-    val email: String,
+    var email: String,
 
     @field:Size(min = 3, max = 50)
     @field:NotBlank()
-    val password: String
-)
+    var password: String
+) {
+    init {
+        name = name.trim()
+        email = email.trim()
+    }
+}
 
