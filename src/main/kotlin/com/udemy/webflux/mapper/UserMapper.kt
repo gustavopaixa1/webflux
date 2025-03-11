@@ -2,6 +2,7 @@ package com.udemy.webflux.mapper
 
 import com.udemy.webflux.entity.User
 import com.udemy.webflux.model.request.UserRequest
+import com.udemy.webflux.model.response.UserResponse
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import org.mapstruct.NullValuePropertyMappingStrategy.IGNORE
@@ -17,4 +18,6 @@ interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     fun toEntity(request: UserRequest): User
+
+    fun toResponse(entity: User): UserResponse
 }

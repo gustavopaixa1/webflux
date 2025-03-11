@@ -13,10 +13,10 @@ interface UserController {
     fun save(@RequestBody request: UserRequest): ResponseEntity<Mono<Void>>
 
     @GetMapping("/{id}")
-    fun find(@PathVariable id: String): ResponseEntity<Mono<UserResponse>>
+    fun findById(@PathVariable id: String): ResponseEntity<Mono<UserResponse>>
 
     @GetMapping
-    fun finAll(): ResponseEntity<Flux<UserResponse>>
+    fun findAll(): ResponseEntity<Flux<UserResponse>>
 
     @PatchMapping("/id")
     fun update(@PathVariable id: String, @RequestBody request: UserRequest): ResponseEntity<Mono<Unit>>

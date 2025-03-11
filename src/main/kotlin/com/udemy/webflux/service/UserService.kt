@@ -9,11 +9,15 @@ import reactor.core.publisher.Mono
 
 @Service
 class UserService(
-    private val repository: UserRepository,
+    private val userRepository: UserRepository,
     private val mapper: UserMapper
 ) {
 
     fun save(request: UserRequest): Mono<User> {
-        return repository.save(mapper.toEntity(request))
+        return userRepository.save(mapper.toEntity(request))
+    }
+
+    fun findById(id: String): Mono<User> {
+        return userRepository.findById(id)
     }
 }

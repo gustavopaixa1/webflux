@@ -13,4 +13,8 @@ class UserRepository(
     public fun save(user: User): Mono<User>{
         return mongoTemplate.save(user)
     }
+
+    public fun findById(id: String): Mono<User>{
+        return mongoTemplate.findById(id, User::class.java)
+    }
 }

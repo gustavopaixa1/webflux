@@ -1,23 +1,22 @@
 package com.udemy.webflux.controller.impl
 
 import com.udemy.webflux.controller.UserController
+import com.udemy.webflux.mapper.UserMapper
 import com.udemy.webflux.model.request.UserRequest
 import com.udemy.webflux.model.response.UserResponse
 import com.udemy.webflux.service.UserService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/users")
 class UserControllerImpl(
-    private val userService: UserService
+    private val userService: UserService,
+    private val userMapper: UserMapper
 ) : UserController {
 
     private val TODO: String = "Not Yet Implemented"
@@ -27,11 +26,12 @@ class UserControllerImpl(
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(request).then())
     }
 
-    override fun find(id: String): ResponseEntity<Mono<UserResponse>> {
-        TODO(TODO)
+    @GetMapping("/{id}")
+    override fun findById(@PathVariable id: String): ResponseEntity<Mono<UserResponse>> {
+        return ResponseEntity.ok(userService.findById(id).map { userMapper.toResponse(it) })
     }
 
-    override fun finAll(): ResponseEntity<Flux<UserResponse>> {
+    override fun findAll(): ResponseEntity<Flux<UserResponse>> {
         TODO(TODO)
     }
 
