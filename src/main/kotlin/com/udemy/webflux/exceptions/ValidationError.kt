@@ -1,4 +1,4 @@
-package com.udemy.webflux.controller.exceptions
+package com.udemy.webflux.exceptions
 
 import java.io.Serializable
 import java.time.LocalDateTime

@@ -1,6 +1,7 @@
 package com.udemy.webflux.service
 
 import com.udemy.webflux.entity.User
+import com.udemy.webflux.exceptions.ObjectNotFoundException
 import com.udemy.webflux.mapper.UserMapper
 import com.udemy.webflux.model.request.UserRequest
 import com.udemy.webflux.repository.UserRepository
@@ -18,6 +19,8 @@ class UserService(
     }
 
     fun findById(id: String): Mono<User> {
-        return userRepository.findById(id)
+        return userRepository.findById(id).switchIfEmpty(Mono.error(
+            ObjectNotFoundException("User not found with id: $id, type: ${User::class.simpleName}")
+        ))
     }
 }

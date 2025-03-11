@@ -1,4 +1,4 @@
-package com.udemy.webflux.controller.exceptions
+package com.udemy.webflux.exceptions
 
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.HttpStatus
@@ -44,7 +44,7 @@ class ControllerExceptionHandler {
         val error: ValidationError = ValidationError(
             timestamp = now(),
             path = exchange.request.uri.path,
-            status = HttpStatus.BAD_REQUEST.value(),
+            status = BAD_REQUEST.value(),
             error = validationError,
             message = validationErrorMessage
         )
@@ -54,6 +54,20 @@ class ControllerExceptionHandler {
         }
 
         return ResponseEntity.status(BAD_REQUEST).body(Mono.just(error))
+    }
+
+    @ExceptionHandler(ObjectNotFoundException::class)
+    fun objectNotFound(ex: ObjectNotFoundException, exchange: ServerWebExchange): ResponseEntity<StandardError> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(
+                StandardError(
+                    timestamp = now(),
+                    path = exchange.request.uri.path,
+                    status = HttpStatus.NOT_FOUND.value(),
+                    error = HttpStatus.NOT_FOUND.reasonPhrase,
+                    message = ex.message.toString()
+                )
+            )
     }
 
 
