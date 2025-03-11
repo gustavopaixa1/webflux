@@ -39,4 +39,9 @@ class UserService(
             .flatMap { updatedUser -> userRepository.save(updatedUser) }
     }
 
+    fun delete(id: String): Mono<User>{
+        return findById(id)
+            .flatMap { user -> userRepository.delete(user).thenReturn(user) }
+    }
+
 }

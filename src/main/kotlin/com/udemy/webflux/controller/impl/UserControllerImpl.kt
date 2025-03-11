@@ -1,6 +1,7 @@
 package com.udemy.webflux.controller.impl
 
 import com.udemy.webflux.controller.UserController
+import com.udemy.webflux.entity.User
 import com.udemy.webflux.mapper.UserMapper
 import com.udemy.webflux.model.request.UserRequest
 import com.udemy.webflux.model.response.UserResponse
@@ -44,7 +45,8 @@ class UserControllerImpl(
         return ResponseEntity.ok(userService.update(id, request).map { userMapper.toResponse(it) })
     }
 
-    override fun delete(id: String): ResponseEntity<Mono<Void>> {
-        TODO(TODO)
+    @DeleteMapping("/{id}")
+    override fun delete(@PathVariable id: String): ResponseEntity<Mono<UserResponse>> {
+        return ResponseEntity.ok(userService.delete(id).map { userMapper.toResponse(it) })
     }
 }

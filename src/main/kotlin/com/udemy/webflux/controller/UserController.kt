@@ -22,5 +22,5 @@ interface UserController {
     fun update(@PathVariable id: String, @RequestBody request: UserRequest): ResponseEntity<Mono<UserResponse>>
 
     @DeleteMapping("/id")
-    fun delete(@PathVariable id: String): ResponseEntity<Mono<Void>>
+    fun delete(@PathVariable id: String): ResponseEntity<Mono<UserResponse>>
 }

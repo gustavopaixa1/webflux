@@ -23,4 +23,8 @@ class UserRepository(
         return mongoTemplate.findAll(User::class.java)
     }
 
+    public fun delete(user: User): Mono<Void>{
+        return mongoTemplate.remove(user).then()
+    }
+
 }
