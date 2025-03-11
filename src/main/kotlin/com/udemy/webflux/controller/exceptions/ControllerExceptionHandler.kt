@@ -1,15 +1,23 @@
 package com.udemy.webflux.controller.exceptions
 
 import org.springframework.dao.DuplicateKeyException
+import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.support.WebExchangeBindException
 import org.springframework.web.server.ServerWebExchange
+import reactor.core.publisher.Mono
 import java.time.LocalDateTime.now
 
 @ControllerAdvice
 class ControllerExceptionHandler {
+
+    val emailAlreadyRegistered: String = "Email already registered"
+    val validationError: String = "ValidationError"
+    val validationErrorMessage: String = "Error on validation"
+
 
     @ExceptionHandler(DuplicateKeyException::class)
     fun duplicateKey(
@@ -29,10 +37,29 @@ class ControllerExceptionHandler {
             )
     }
 
+    @ExceptionHandler(WebExchangeBindException::class)
+    fun validationError(
+        ex: WebExchangeBindException, exchange: ServerWebExchange
+    ): ResponseEntity<Mono<ValidationError>> {
+        val error: ValidationError = ValidationError(
+            timestamp = now(),
+            path = exchange.request.uri.path,
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = validationError,
+            message = validationErrorMessage
+        )
+
+        for (x in ex.bindingResult.fieldErrors){
+            error.addError(x.field, x.defaultMessage.toString())
+        }
+
+        return ResponseEntity.status(BAD_REQUEST).body(Mono.just(error))
+    }
+
 
     private fun verifyDupKey(message: String?): String {
         if (message!!.contains("email dup key")) {
-            return "Email already registered";
+            return emailAlreadyRegistered;
         }
         return "Dup key exception"
     }

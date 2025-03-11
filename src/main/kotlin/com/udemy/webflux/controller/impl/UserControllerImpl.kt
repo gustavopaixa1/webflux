@@ -4,6 +4,7 @@ import com.udemy.webflux.controller.UserController
 import com.udemy.webflux.model.request.UserRequest
 import com.udemy.webflux.model.response.UserResponse
 import com.udemy.webflux.service.UserService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,7 +23,7 @@ class UserControllerImpl(
     private val TODO: String = "Not Yet Implemented"
 
     @PostMapping
-    override fun save(@RequestBody request: UserRequest): ResponseEntity<Mono<Void>> {
+    override fun save(@Valid @RequestBody request: UserRequest): ResponseEntity<Mono<Void>> {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(request).then())
     }
 
