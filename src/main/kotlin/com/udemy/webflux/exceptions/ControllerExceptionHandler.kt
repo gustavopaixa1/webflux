@@ -41,7 +41,7 @@ class ControllerExceptionHandler {
     fun validationError(
         ex: WebExchangeBindException, exchange: ServerWebExchange
     ): ResponseEntity<Mono<ValidationError>> {
-        val error: ValidationError = ValidationError(
+        val error = ValidationError(
             timestamp = now(),
             path = exchange.request.uri.path,
             status = BAD_REQUEST.value(),
@@ -73,7 +73,7 @@ class ControllerExceptionHandler {
 
     private fun verifyDupKey(message: String?): String {
         if (message!!.contains("email dup key")) {
-            return emailAlreadyRegistered;
+            return emailAlreadyRegistered
         }
         return "Dup key exception"
     }

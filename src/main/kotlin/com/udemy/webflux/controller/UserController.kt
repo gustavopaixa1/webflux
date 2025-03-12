@@ -1,6 +1,5 @@
 package com.udemy.webflux.controller
 
-import com.udemy.webflux.entity.User
 import com.udemy.webflux.model.request.UserRequest
 import com.udemy.webflux.model.response.UserResponse
 import org.springframework.http.ResponseEntity
@@ -19,9 +18,9 @@ interface UserController {
     @GetMapping
     fun findAll(): ResponseEntity<Flux<UserResponse>>
 
-    @PatchMapping("/id")
+    @PatchMapping("/{id}")
     fun update(@PathVariable id: String, @RequestBody request: UserRequest): ResponseEntity<Mono<UserResponse>>
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     fun delete(@PathVariable id: String): ResponseEntity<Mono<UserResponse>>
 }

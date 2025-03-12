@@ -5,6 +5,4 @@ data class UserResponse(
     var name: String,
     var email: String,
     var password: String
-) {
-
-}
+)

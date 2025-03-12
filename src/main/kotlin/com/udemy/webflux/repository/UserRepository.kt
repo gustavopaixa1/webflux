@@ -11,20 +11,20 @@ class UserRepository(
     private val mongoTemplate: ReactiveMongoTemplate
 ) {
 
-    public fun save(user: User): Mono<User>{
+    fun save(user: User): Mono<User>{
         return mongoTemplate.save(user)
     }
 
-    public fun findById(id: String): Mono<User>{
+    fun findById(id: String): Mono<User>{
         return mongoTemplate.findById(id, User::class.java)
     }
 
-    public fun findAll(): Flux<User> {
+    fun findAll(): Flux<User> {
         return mongoTemplate.findAll(User::class.java)
     }
 
-    public fun delete(user: User): Mono<Void>{
-        return mongoTemplate.remove(user).then()
+    fun delete(user: User): Mono<Unit> {
+        return mongoTemplate.remove(user).then().then(Mono.fromCallable { })
     }
 
 }
