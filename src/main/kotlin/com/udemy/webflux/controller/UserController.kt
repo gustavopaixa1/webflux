@@ -1,5 +1,6 @@
 package com.udemy.webflux.controller
 
+import com.udemy.webflux.entity.User
 import com.udemy.webflux.model.request.UserRequest
 import com.udemy.webflux.model.response.UserResponse
 import org.springframework.http.ResponseEntity
@@ -10,7 +11,7 @@ import reactor.core.publisher.Mono
 interface UserController {
 
     @PostMapping
-    fun save(@RequestBody request: UserRequest): ResponseEntity<Mono<Void>>
+    fun save(@RequestBody request: UserRequest): ResponseEntity<Mono<UserResponse>>
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: String): ResponseEntity<Mono<UserResponse>>

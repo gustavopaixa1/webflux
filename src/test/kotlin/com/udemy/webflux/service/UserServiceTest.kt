@@ -1,14 +1,12 @@
 package com.udemy.webflux.service
 
+import com.udemy.webflux.Builders
 import com.udemy.webflux.entity.User
 import com.udemy.webflux.mapper.UserMapper
-import com.udemy.webflux.model.request.UserRequest
 import com.udemy.webflux.repository.UserRepository
 import io.mockk.every
 import io.mockk.junit5.MockKExtension
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -18,8 +16,12 @@ import reactor.test.StepVerifier
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+
+
 @ExtendWith(MockKExtension::class)
 class UserServiceTest {
+
+    private val builder = Builders()
 
     private val userRepository: UserRepository = mockk()
 
@@ -31,8 +33,8 @@ class UserServiceTest {
 
     @Test
     fun `should save a user`() {
-        val userRequest = userRequestBuilder(name = "Gustavo", email = "Teste@Mockk")
-        val userEntity = userBuilder(name = "Gustavo", email = "Teste@Mockk")
+        val userRequest = builder.userRequestBuilder(name = "Gustavo", email = "Teste@Mockk")
+        val userEntity = builder.userBuilder(name = "Gustavo", email = "Teste@Mockk")
 
         every{userMapper.toEntity(userRequest)} returns userEntity
         every {userRepository.save(userEntity)} returns Mono.just(userEntity)
@@ -53,8 +55,8 @@ class UserServiceTest {
 
     @Test
     fun `should save a name without spaces at the end`(){
-        val request = userRequestBuilder()
-        val entity = userBuilder(name = "Texto     ", email = "Teste@Mockk          ")
+        val request = builder.userRequestBuilder()
+        val entity = builder.userBuilder(name = "Texto     ", email = "Teste@Mockk          ")
 
         every{userMapper.toEntity(request)} returns entity
         every {userRepository.save(entity)} returns Mono.just(entity)
@@ -75,7 +77,7 @@ class UserServiceTest {
 
     @Test
     fun  `should return a user by id`(){
-        val user: User = userBuilder(id = id)
+        val user: User = builder.userBuilder(id = id)
 
         every {userRepository.findById(id)} returns Mono.just(user)
         val result = userService.findById(id)
@@ -92,7 +94,7 @@ class UserServiceTest {
 
     @Test
     fun `should find all users`() {
-        val users = listOf(userBuilder(), userBuilder())
+        val users = listOf(builder.userBuilder(), builder.userBuilder())
         val fluxUsers = Flux.fromIterable(users)
 
         every { userRepository.findAll() } returns fluxUsers
@@ -109,9 +111,9 @@ class UserServiceTest {
 
     @Test
     fun `should update a user`() {
-        val userRequest = userRequestBuilder(name = "Updated Name", email = "updated@mockk.com")
-        val existingUser = userBuilder(id = id, name = "Original Name", email = "original@mockk.com")
-        val updatedUser = userBuilder(id = id, name = "Updated Name", email = "updated@mockk.com")
+        val userRequest = builder.userRequestBuilder(name = "Updated Name", email = "updated@mockk.com")
+        val existingUser = builder.userBuilder(id = id, name = "Original Name", email = "original@mockk.com")
+        val updatedUser = builder.userBuilder(id = id, name = "Updated Name", email = "updated@mockk.com")
 
         every { userRepository.findById(id) } returns Mono.just(existingUser)
         every { userMapper.toEntity(userRequest, existingUser) } returns updatedUser
@@ -135,7 +137,7 @@ class UserServiceTest {
     @Test
     fun `should delete a user`() {
 
-        val user = userBuilder(id = id)
+        val user = builder.userBuilder(id = id)
 
         every { userRepository.findById(id) } returns Mono.just(user)
         every { userRepository.delete(user) } returns Mono.empty()
@@ -155,17 +157,6 @@ class UserServiceTest {
 
     }
 
-    fun userRequestBuilder(
-        name: String = "gustavo",
-        email: String = "gus@teste",
-        password: String = "123"
-    ) = UserRequest(name, email, password)
 
-    fun userBuilder(
-        id: String = "123",
-        name: String = "gustavo",
-        email: String = "gus@teste",
-        password: String = "123"
-    ) = User(id, name, email, password)
 
 }

@@ -12,11 +12,14 @@ import reactor.core.publisher.Mono
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val mapper: UserMapper
+    private val userMapper: UserMapper
 ) {
 
     fun save(request: UserRequest): Mono<User> {
-        return userRepository.save(mapper.toEntity(request))
+
+        val userEntity = userMapper.toEntity(request)
+
+        return userRepository.save(userEntity).onErrorResume { error -> Mono.error(error) }
     }
 
     fun findById(id: String): Mono<User> {
@@ -35,7 +38,7 @@ class UserService(
 
     fun update(id: String, request: UserRequest): Mono<User> {
         return findById(id)
-            .map { user -> mapper.toEntity(request, user) }
+            .map { user -> userMapper.toEntity(request, user) }
             .flatMap { updatedUser -> userRepository.save(updatedUser) }
     }
 

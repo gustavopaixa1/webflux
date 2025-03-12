@@ -23,8 +23,8 @@ class UserControllerImpl(
     private val TODO: String = "Not Yet Implemented"
 
     @PostMapping
-    override fun save(@Valid @RequestBody request: UserRequest): ResponseEntity<Mono<Void>> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(request).then())
+    override fun save(@Valid @RequestBody request: UserRequest): ResponseEntity<Mono<UserResponse>> {
+        return ResponseEntity.ok(userService.save(request).map { userMapper.toResponse(it) })
     }
 
     @GetMapping("/{id}")
