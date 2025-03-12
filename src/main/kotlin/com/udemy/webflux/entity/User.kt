@@ -18,5 +18,8 @@ data class User(
     var password: String
 
 ) {
-
+    init {
+        name = name.trim()
+        email = email.trim()
+    }
 }
